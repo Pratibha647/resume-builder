@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import HERO_IMG from '../assets/HERO_IMG.png'
 import { useNavigate } from 'react-router-dom';
+import Login from './Auth/Login';
+import SignUp from './Auth/SignUp';
+import Modal from '../components/Modal';
 
 export default function LandingPage() {
   const navigate=useNavigate();
@@ -8,13 +11,15 @@ export default function LandingPage() {
   const[openAuthModal, setOpenAuthModal]=useState(false);
   const[currentPage, setCurrentPage]=useState("login");
 
-  const handleCTA=()=>{};
+const handleCTA = () => {
+  setOpenAuthModal(true);
+};
   return (
-    <div className='w-full min-h-full bg-white pb-96'>
+    <div className='w-full min-h-screen bg-white pb-96'>
       <div className='container mx-auto px-4 py-6'>
         {/* Header */}
         <header className='flex justify-between items-center mb-16 '>
-          <div className='text-2xl font-bold'>Resume Builder</div>
+          <div className='text-4xl font-bold p-5'>Resume Builder</div>
           <button className='bg-purple-100 text-sm font-bold text-black px-7 py-2.5 rounded-lg hover:bg-gray-800 hover:text-white transition-colors cursor-pointer' onClick={()=>setOpenAuthModal(true)}>Login / Sign Up</button>
         </header>
 
@@ -70,6 +75,23 @@ export default function LandingPage() {
           </div>
         </section>
       </div>
+      <div className='text-sm bg-gray-50 text-secondary text-center p-5 mt-5 '>
+          Made with ❤️... Happy Coding
+      </div>
+
+      <Modal 
+      isOpen={openAuthModal}
+      onClose={()=>{
+        setOpenAuthModal(false);
+        setCurrentPage("login");
+      }}
+      hideHeader
+      >
+      <div>
+        {currentPage==="login" && <Login setCurrentPage={setCurrentPage}/>}
+        {currentPage==="signup" && <SignUp setCurrentPage={setCurrentPage}/>}
+      </div>
+    </Modal>
     </div>
   )
 }
