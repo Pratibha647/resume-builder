@@ -1,13 +1,17 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Input from '../../components/Inputs/Input';
 import { validateEmail } from '../../utils/helper';
+import { UserContext } from '../../context/userContext';
+import axiosInstance from '../../utils/axiosInstance';
+import { API_PATHS } from '../../utils/apiPaths';
 
 export default function Login({setCurrentPage}) {
   const [email, setEmail] = useState("");
   const[password, setPassword]=useState("");
   const[error, setError]=useState(null);
 
+  const {updateUser}=useContext(UserContext);
   const navigate=useNavigate();
 
   // Handle Login Form Submit
@@ -26,9 +30,24 @@ export default function Login({setCurrentPage}) {
 
     // Login API call
     try {
-      
+      const response=await axiosInstance.post(API_PATHS.AUTH.LOGIN, {
+        email,
+        password
+      });
+
+      const token=response.data;
+
+      if(token){
+        localStorage.setItem("token", token);
+        updateUser(response.data);
+        navigate("/dashboard");
+      }
     } catch (error) {
-      
+      if(error.response && error.response.data.message){
+        setError(error.response.data.message);
+      }else{
+        setError("Something went wrong, Please try again");
+      }
     }
   };
   return (
@@ -45,7 +64,7 @@ export default function Login({setCurrentPage}) {
         <button type='submit' className='btn-primary'>LOGIN</button>
 
         <p className='text-[13px] text-slate-800 mt-3'>Don't have an account?{" "}
-          <button className='font-medium text-primary  underline cursor-pointer' onClick={()=>{
+          <button className='font-medium text-primary underline cursor-pointer' onClick={()=>{
             setCurrentPage("signup");
           }}>
             SignUp

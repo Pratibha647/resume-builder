@@ -5,11 +5,12 @@ import Login from "./pages/Auth/Login";
 import SignUp from "./pages/Auth/SignUp";
 import DashBoard from "./pages/Home/DashBoard";
 import EditResume from "./pages/ResumeUpdate/EditResume";
+import UserProvider from "./context/userContext";
 
 
 export default function App() {
   return (
-    <>
+    <UserProvider>
     <div>
       <Router>
         <Routes>
@@ -30,6 +31,6 @@ export default function App() {
         fontSize: "13px",
       },
     }}/>
-    </>
+    </UserProvider>
   )
 }
