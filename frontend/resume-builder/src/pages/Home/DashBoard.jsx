@@ -40,7 +40,7 @@ export default function DashBoard() {
 
       {allResumes?.map((resume)=>(
         <ResumeSummaryCard 
-        key={resume?.id}
+        key={resume?._id}
         imgUrl={resume?.thumbnailLink || null}
         title={resume.title}
         lastUpdated={
@@ -49,7 +49,7 @@ export default function DashBoard() {
           : ""
         }
         onSelect={()=>navigate(`/resume/${resume?._id}`)}/>
-      ))};
+      ))}
     </div>
 
     <Modal

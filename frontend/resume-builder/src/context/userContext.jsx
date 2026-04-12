@@ -12,12 +12,6 @@ const UserProvider=({children})=>{
     useEffect(()=>{
         if(user) return;
 
-        const accessToken=localStorage.getItem("token");
-        if(accessToken){
-            setLoading(false);
-            return;
-        }
-
         const fetchUser=async()=>{
             try{
                 const response=await axiosInstance.get(API_PATHS.AUTH.GET_PROFILE);
@@ -26,9 +20,16 @@ const UserProvider=({children})=>{
                 console.error("User not authenticated", error);
                 clearUser();
             }finally{
-                setLoadinf(false);
+                setLoading(false);
             }
         };
+
+        const accessToken=localStorage.getItem("token");
+        if(accessToken){
+            setLoading(false);
+            fetchUser();
+        }
+
     }, []);
 
     const updateUser=(userData)=>{
