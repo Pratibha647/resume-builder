@@ -18,8 +18,8 @@ export default function ProfileInfoForm({profileData, updateSection, onNext}) {
 
             <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                 <Input
-                value={profileData.fullName || ""}
-                onChange={({target})=>updateSection("fullName", target.value)}
+                value={profileData.fullname || ""}
+                onChange={({target})=>updateSection("fullname", target.value)}
                 label="Full Name"
                 placeholder="John"
                 type="text"/>

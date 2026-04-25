@@ -16,6 +16,7 @@ import SkillsInfoForm from './Forms/SkillsInfoForm';
 import ProjectsDetailForm from './Forms/ProjectsDetailForm';
 import CertificationInfoForm from './Forms/CertificationInfoForm';
 import AdditionalInfoForm from './Forms/AdditionalInfoForm';
+import RenderResume from '../../components/ResumeTemplate/RenderResume';
 
 export default function EditResume() {
   const { resumeId } = useParams();
@@ -44,7 +45,7 @@ export default function EditResume() {
     },
     template: {
       theme: "",
-      colorPalette: ""
+      colorPalette: null,
     },
     contactInfo: {
       email: "",
@@ -217,7 +218,7 @@ export default function EditResume() {
     const currentIndex = pages.indexOf(currentPage);
     if (currentIndex !== -1 && currentIndex < pages.length - 1) {
       const nextIndex = currentIndex + 1;
-      setCurrentPage(pages(nextIndex));
+      setCurrentPage(pages[nextIndex]);
 
       // Set progress as percentage
       const percent = Math.round((nextIndex / (pages.length - 1)) * 100);
@@ -275,7 +276,7 @@ export default function EditResume() {
             }} />
         );
 
-      case "work-experince":
+      case "work-experience":
         return (
           <WorkExperienceForm
             workExperience={resumeData?.workExperience}
@@ -442,7 +443,9 @@ export default function EditResume() {
 
   // Function to update baseWidth based on the resume container size
   const updateBaseWidth = () => {
-
+    if(resumeRef.current){
+      setBaseWidth(resumeRef.current.offsetWidth);
+    }
   };
 
   useEffect(() => {
@@ -494,7 +497,7 @@ export default function EditResume() {
       </div>
 
       <div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
-        <div className='bg-white rounded-lg border border-purple-100 overflow-hidden'>
+        {/* <div className='bg-white rounded-lg border border-purple-100 overflow-hidden'>
 
           <StepProgress progress={progress} />
 
@@ -536,10 +539,15 @@ export default function EditResume() {
               </button>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <div ref={resumeRef} className='h-[100vh]'>
           {/* Resume Template */}
+          <RenderResume
+            templateId={resumeData?.template?.theme || ""}
+            resumeData={resumeData}
+            colorPalette={resumeData?.template?.colorPalette}
+            containerWidth={baseWidth}/>
         </div>
       </div>
     </div>
