@@ -16,6 +16,7 @@ import LanguageSection from '../ResumeSections/LanguageSection';
 import WorkExperience from '../ResumeSections/WorkExperience';
 import ProjectInfo from '../ResumeSections/ProjectInfo';
 import SkillSection from '../ResumeSections/SkillSection';
+import CertificationInfo from '../ResumeSections/CertificationInfo';
 
 const DEFAULT_THEME = ["#EBFDFF", "#A1F4FD", "#CEFAFE", "#00B8DB", "#4A5565"];
 
@@ -188,6 +189,39 @@ export default function TemplateOne({ resumeData, colorPalette, containerWidth }
                     accentColor={themeColors[3]}
                     bgColor={themeColors[2]}/>
                 </div>
+
+                <div className='mt-4'>
+                    <Title text="Certifications" color={themeColors[1]}/>
+
+                    <div className='grid grid-cols-2 gap-2'>
+                        {resumeData.certifications.map((data, index)=>(
+                            <CertificationInfo
+                            key={`cert_${index}`}
+                            title={data.title}
+                            issuer={data.issuer}
+                            year={data.year}
+                            bgColor={themeColors[2]}
+                            />
+                        ))}
+                    </div>
+                </div>
+
+                {resumeData.interests.length>0 && 
+                    resumeData.interests[0] != "" && <div className='mt-4'>
+                    <Title text="Interests" color={themeColors[1]}/>
+
+                    <div className='flex items-center flex-wrap gap-3 mt-4'>
+                        {resumeData.interests.map((interest, index)=>{
+                            if(!interest) return null;
+                            return(
+                                <div
+                                key={`interest_${index}`}
+                                className='text-[10px] font-medium py-1 px-3 rounded-lg'
+                                style={{backgroundColor: themeColors[2]}}>{interest}</div>
+                            );
+                        })}
+                    </div>
+                </div>}
             </div>
         </div>
     </div>

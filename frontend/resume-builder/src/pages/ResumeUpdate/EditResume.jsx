@@ -17,6 +17,9 @@ import ProjectsDetailForm from './Forms/ProjectsDetailForm';
 import CertificationInfoForm from './Forms/CertificationInfoForm';
 import AdditionalInfoForm from './Forms/AdditionalInfoForm';
 import RenderResume from '../../components/ResumeTemplate/RenderResume';
+import { captureElementAsImage, dataURLtoFile, fixTailwindColors } from '../../utils/helper';
+import ThemeSelector from './ThemeSelector';
+import Modal from '../../components/Modal';
 
 export default function EditResume() {
   const { resumeId } = useParams();
@@ -431,9 +434,68 @@ export default function EditResume() {
   };
 
   // upload thumbnail and resume profile img
-  const uploadResumeImages = async () => { };
+  const uploadResumeImages = async () => {
+    try {
+      setIsLoading(true);
 
-  const updateResumeDetails = async (thumbnailLink, profilePreviewUrl) => { };
+      fixTailwindColors(resumeRef.current);
+      const imageDataUrl=await captureElementAsImage(resumeRef.current);
+
+      // Convert base64 to file
+      const thumbnailFile=dataURLtoFile(
+        imageDataUrl,
+        `resume-${resumeId}.png`
+      );
+
+      const profileImageFile=resumeData?.profileInfo?.profileImg || null;
+
+      const formData=new FormData();
+      if(profileImageFile) formData.append("profileImage", profileImageFile);
+      if(thumbnailFile) formData.append("thumbnail", thumbnailFile);
+
+      const uploadResume = await axiosInstance.put(
+        API_PATHS.RESUME.UPLOAD_IMAGES(resumeId),
+        formData,
+        {headers:{"Content-Type":"multipart/form-data"}}
+      );
+
+      const {thumbnailLink, profilePreviewUrl} = uploadResume.data;
+
+      console.log("RESUME_DATA___", resumeData);
+
+      // Call the second API to update other resume data
+      await updateResumeDetails(thumbnailLink, profilePreviewUrl);
+
+      toast.success("Resume Updated Successfully!");
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Error uploading images:", error);
+      toast.error("Failed to upload images");
+    }finally{
+      setIsLoading(false);
+    }
+   };
+
+  const updateResumeDetails = async (thumbnailLink, profilePreviewUrl) => { 
+    try {
+      setIsLoading(true);
+
+      const response=await axiosInstance.put(
+        API_PATHS.RESUME.UPDATE(resumeId),{
+          ...resumeData,
+          thumbnailLink: thumbnailLink || "",
+          profileInfo:{
+            ...resumeData.profileInfo,
+            profilePreviewUrl: profilePreviewUrl || "",
+          },
+        }
+      );
+    } catch (error) {
+      console.error("Error capturing the image:", error);
+    }finally{
+      setIsLoading(false);
+    }
+  };
 
   // Delete Resume
   const handleDeleteResume = async () => { };
@@ -460,6 +522,7 @@ export default function EditResume() {
       window.removeEventListener("resize", updateBaseWidth);
     };
   }, []);
+
   return <DashboardLayout>
     <div className='conatiner mx-auto'>
       <div className='flex items-center justify-between gap-5 bg-white rounded-lg border border-purple-100 py-3 px-4 mb-4'>
@@ -497,7 +560,7 @@ export default function EditResume() {
       </div>
 
       <div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
-        {/* <div className='bg-white rounded-lg border border-purple-100 overflow-hidden'>
+        <div className='bg-white rounded-lg border border-purple-100 overflow-hidden'>
 
           <StepProgress progress={progress} />
 
@@ -539,7 +602,7 @@ export default function EditResume() {
               </button>
             </div>
           </div>
-        </div> */}
+        </div>
 
         <div ref={resumeRef} className='h-[100vh]'>
           {/* Resume Template */}
@@ -551,6 +614,24 @@ export default function EditResume() {
         </div>
       </div>
     </div>
+
+    <Modal
+      isOpen={openThemeSelector}
+      onClose={()=>setOpenThemeSelector(false)}
+      title="Change Theme">
+        <div className='w-[90vw] h-[80vh]'>
+          <ThemeSelector
+          selectedTheme={resumeData?.template}
+          setSelectedTheme={(value)=>{
+            setResumeData((prevState)=>({
+              ...prevState,
+              template:value || prevState.template,
+            }));
+          }}
+          resumeData={null}
+          onClose={()=>setOpenThemeSelector(false)}/>
+        </div>
+      </Modal>
   </DashboardLayout>
 
 }

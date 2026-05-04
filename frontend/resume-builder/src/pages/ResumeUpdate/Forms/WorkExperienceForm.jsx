@@ -66,7 +66,7 @@ export default function WorkExperienceForm({workExperience, updateArrayItem, add
         <button
         type='button'
         className='self-start flex items-center gap-2 px-4 py-2 rounded bg-purple-100 text-purple-800 text-sm font-medium hover:bg-purple-200 cursor-pointer'
-        onClick={()=> addArryaItem({company:"", role:"", startDate:"", endDate:"", description:""})}>
+        onClick={()=> addArrayItem({company:"", role:"", startDate:"", endDate:"", description:""})}>
           <LuPlus/> Add Work Experience
         </button>
       </div>

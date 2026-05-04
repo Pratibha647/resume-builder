@@ -18,7 +18,7 @@ const createResume=async(req, res)=>{
                 designation:"",
                 summary:"",
             },
-            ContactInfo:{
+            contactInfo:{
                 email:"",
                 phone:"",
                 location:"",

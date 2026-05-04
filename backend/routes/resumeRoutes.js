@@ -15,7 +15,7 @@ router.post("/", protect, createResume); //Create Resume
 router.get("/", protect, getUserResumes); //Get Resume
 router.get("/:id", protect, getResumeById); //Get Resume By ID
 router.put("/:id", protect, updateResume); //Update Resume
-router.put("/:id", protect, uploadResumeImages);
+router.put("/:id/upload-images", protect, uploadResumeImages);
 
 router.delete("/:id", protect, deleteResume); //Delete Resume
 
