@@ -498,7 +498,18 @@ export default function EditResume() {
   };
 
   // Delete Resume
-  const handleDeleteResume = async () => { };
+  const handleDeleteResume = async () => { 
+    try {
+      setIsLoading(true);
+      const response=await axiosInstance.delete(API_PATHS.RESUME.DELETE(resumeId));
+      toast.success("Resume Deleted Successfully");
+      navigate('/dashboard');
+    } catch (error) {
+      console.error("Error capturing image: ", error);
+    }finally{
+      setIsLoading(false);
+    }
+  };
 
   // download resume
   const reactToPrintFn = useReactToPrint({ contentRef: resumeDownloadRef });
@@ -552,7 +563,7 @@ export default function EditResume() {
 
           <button
             className='btn-small-light p-2'
-            onClick={() => setOpenPreviewModal()}>
+            onClick={() => setOpenPreviewModal(true)}>
             <LuDownload className='text-[16px]' />
             <span className='hidden md:block'>Preview & Download</span>
           </button>
@@ -630,6 +641,22 @@ export default function EditResume() {
           }}
           resumeData={null}
           onClose={()=>setOpenThemeSelector(false)}/>
+        </div>
+      </Modal>
+
+      <Modal
+      isOpen={openPreviewModal}
+      onClose={()=>setOpenPreviewModal(false)}
+      title={resumeData.title}
+      showActionBtn
+      actionBtnText="Download"
+      actionBtnIcon={<LuDownload className='text-[16px]'/>}
+      onActionClick={()=>reactToPrintFn()}>
+        <div ref={resumeDownloadRef} className='w-[98vw] h-[90vh] '>
+          <RenderResume
+          templateId={resumeData?.template?.theme || ""}
+          resumeData={resumeData}
+          colorPalette={resumeData?.template?.colorPalette || []}/>
         </div>
       </Modal>
   </DashboardLayout>
