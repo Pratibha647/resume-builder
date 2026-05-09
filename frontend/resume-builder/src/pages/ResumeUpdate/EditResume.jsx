@@ -536,7 +536,8 @@ export default function EditResume() {
 
   return <DashboardLayout>
     <div className='conatiner mx-auto'>
-      <div className='flex items-center justify-between gap-5 bg-white rounded-lg border border-purple-100 py-3 px-4 mb-4'>
+      <div className='flex items-center justify-between gap-5 rounded-lg py-3 px-4 mb-4'
+           style={{ backgroundColor: 'var(--bg-surface)', border: '1px solid var(--border-light)' }}>
         <TitleInput
           title={resumeData.title}
           setTitle={(value) =>
@@ -571,7 +572,8 @@ export default function EditResume() {
       </div>
 
       <div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
-        <div className='bg-white rounded-lg border border-purple-100 overflow-hidden'>
+        <div className='rounded-lg overflow-hidden'
+             style={{ backgroundColor: 'var(--bg-surface)', border: '1px solid var(--border-light)' }}>
 
           <StepProgress progress={progress} />
 
@@ -579,7 +581,8 @@ export default function EditResume() {
 
           <div className='mx-5'>
             {errorMsg && (
-              <div className='flex items-center gap-2 text-[11px] font-medium text-amber-600 bg-amber-100 px-2 py-0.5 my-1 rounded'>
+              <div className='flex items-center gap-2 text-[11px] font-medium px-2 py-0.5 my-1 rounded'
+                   style={{ color: '#d97706', backgroundColor: 'rgba(217,119,6,0.1)' }}>
                 <LuCircleAlert className='text-md' /> {errorMsg}
               </div>
             )}

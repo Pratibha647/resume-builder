@@ -6,10 +6,11 @@ import SignUp from "./pages/Auth/SignUp";
 import DashBoard from "./pages/Home/DashBoard";
 import EditResume from "./pages/ResumeUpdate/EditResume";
 import UserProvider from "./context/userContext";
-
+import ThemeProvider from "./context/ThemeContext";
 
 export default function App() {
   return (
+    <ThemeProvider>
     <UserProvider>
     <div>
       <Router>
@@ -32,5 +33,6 @@ export default function App() {
       },
     }}/>
     </UserProvider>
+    </ThemeProvider>
   )
 }

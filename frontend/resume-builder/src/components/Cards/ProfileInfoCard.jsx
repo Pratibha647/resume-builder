@@ -1,25 +1,40 @@
-import React, { useContext } from 'react'
+import React from 'react'
+import { useContext } from 'react'
 import { UserContext } from '../../context/userContext'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'
 
 export default function ProfileInfoCard() {
-    const {user, clearUser}=useContext(UserContext);
-    const navigate=useNavigate();
+  const { user, clearUser } = useContext(UserContext)
+  const navigate = useNavigate()
 
-    const handleLogout=()=>{
-        localStorage.clear();
-        clearUser();
-        navigate("/");
-    };
+  const handleLogout = () => {
+    localStorage.clear()
+    clearUser()
+    navigate('/login')
+  }
+
   return (
-  user && (
-    <div className='flex items-center'>
-        <img src={user.profileImageUrl} alt=""  className='w-11 h-11 bg-gray-300 rounded-full mr-3'/>
+    user && (
+      <div className="flex items-center gap-3">
+        <img
+          src={user.profileImageUrl}
+          alt=""
+          className="w-9 h-9 rounded-full object-cover"
+          style={{ border: '1.5px solid var(--border-medium)' }}
+        />
         <div>
-            <div className='text-[15px] font-bold leading-3'>{user.name || ""}</div>
-            <button className='text-purple-500 text-sm font-semibold cursor-pointer hover:underline' onClick={handleLogout}>Logout</button>
+          <div className="text-[14px] font-semibold" style={{ color: 'var(--text-heading)' }}>
+            {user.name || ''}
+          </div>
+          <button
+            className="text-[12px] font-medium transition-colors hover:underline"
+            style={{ color: 'var(--text-muted)' }}
+            onClick={handleLogout}
+          >
+            Logout
+          </button>
         </div>
-    </div>
+      </div>
+    )
   )
-  );
-};
+}
