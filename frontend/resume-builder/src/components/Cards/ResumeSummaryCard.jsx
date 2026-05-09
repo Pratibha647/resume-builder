@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { getLightColorFromImage } from '../../utils/helper';
 import { useHoverTilt } from '../../animations/useGSAPAnimations';
-import { LuMoreVertical } from 'react-icons/lu';
+import { LuEllipsis } from 'react-icons/lu';
 
 export default function ResumeSummaryCard({ imgUrl, title, lastUpdated, onSelect }) {
   const cardRef = useRef(null);
@@ -55,7 +55,7 @@ export default function ResumeSummaryCard({ imgUrl, title, lastUpdated, onSelect
           style={{ color: 'var(--text-faint)' }}
           onClick={onSelect}
         >
-          <LuMoreVertical className="text-lg" />
+          <LuEllipsis className="text-lg" />
         </button>
       </div>
     </div>
