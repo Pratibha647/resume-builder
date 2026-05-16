@@ -18,6 +18,7 @@ const allowedOrigins = [
   "http://localhost:5174",
   "http://localhost:5175",
   process.env.CLIENT_URL,
+  "https://resume-builder-f577.vercel.app/"
 ].filter(Boolean);
 
 app.use(
